@@ -48,7 +48,7 @@ export default {
     },
     methods: {
         addTeam: function (pokemon) {
-            console.log(pokemon)
+            console.log(JSON.parse(JSON.stringify(pokemon)))
         },
         customClasses: function (type) {
             const classes = {
@@ -67,9 +67,11 @@ export default {
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 * {
     font-family: 'Press Start 2P', cursive;
 }
+
 p,
 h2 {
     text-transform: capitalize;
@@ -86,19 +88,20 @@ h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 1.8s ease;
 }
-.grass{
+
+.grass {
     background-color: #E9EDC9;
 }
 
-.fire{
+.fire {
     background-color: #d19c8e;
 }
 
-.water{
+.water {
     background-color: #a6bed8
 }
 
-.poison{
+.poison {
     background-color: #a88ed1;
 }
 
@@ -124,7 +127,13 @@ h2 {
     width: 100%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    transition: transform 0.5s ease;
 }
+
+.pokemon-image img:hover {
+    transform: scale(1.03);
+}
+
 
 .pokemon-details {
     padding: 20px;
@@ -136,8 +145,8 @@ h2 {
 }
 
 .add-to-team-button {
-    background-color: #ccc;
-    color: #fff;
+    background-color: #FECA1A;
+    color: #3761A8;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -147,7 +156,8 @@ h2 {
 }
 
 .add-to-team-button:hover {
-    background-color: #0056b3;
+    background-color: #daab11;
+    color: #4067ac;
     transition: background-color .5s ease;
 }
 </style>
