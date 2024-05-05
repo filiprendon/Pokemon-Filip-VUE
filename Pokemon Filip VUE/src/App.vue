@@ -1,11 +1,13 @@
 <script>
 import HelloWorld from './components/HelloWorld.vue'
 import PokemonList from './components/PokemonList.vue'
+import PokedexApp from './components/PokedexApp.vue'
 
 export default{
   name: 'App',
   components:{
     HelloWorld,
+    PokedexApp,
     PokemonList
   }
 }
@@ -13,7 +15,7 @@ export default{
 
 <template>
   <div>
-  <PokemonList></PokemonList>
+  <PokedexApp></PokedexApp>
   </div>
 </template>
 
