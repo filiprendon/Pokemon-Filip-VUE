@@ -1,10 +1,11 @@
 <template>
-    <HelloWorld @show-team="showPokemonTeam" @go-back="seeList"/>
+    <HelloWorld @show-team="showPokemonTeam" @go-back="seeList">
+        <button v-if="!showTeam" @click="goBack">Volver</button></HelloWorld>
     <div class="pokedex-container">
 
         <div class="content">
             <PokemonList v-if="!showTeam" :pokemons="pokemons" @addTeam="addTeam" />
-            <PokemonTeam v-if="showTeam" :team="team" @seeList="seeList"></PokemonTeam>
+            <PokemonTeam v-if="showTeam" :team="team"></PokemonTeam>
         </div>
     </div>
 </template>
