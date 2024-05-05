@@ -1,24 +1,23 @@
 <template>
+    <HelloWorld @show-team="showPokemonTeam" @go-back="seeList"/>
     <div class="pokedex-container">
-        <nav class="navbar" style="margin-top: 50px;" @showTeam="showPokemonTeam">
-            <div class="navbar-brand">
-                <h1>Pokédex</h1>
-            </div>
-        </nav>
+
         <div class="content">
-            <PokemonList :pokemons="pokemons" @addTeam="addTeam" />
-            <PokemonTeam v-if="showTeam" :team="team"></PokemonTeam>
+            <PokemonList v-if="!showTeam" :pokemons="pokemons" @addTeam="addTeam" />
+            <PokemonTeam v-if="showTeam" :team="team" @seeList="seeList"></PokemonTeam>
         </div>
     </div>
 </template>
 
 <script>
+import HelloWorld from './HelloWorld.vue';
 import PokemonList from './PokemonList.vue'
 import PokemonTeam from './PokemonTeam.vue'
 export default {
     components: {
         PokemonList,
-        PokemonTeam
+        PokemonTeam,
+        HelloWorld
     },
     data() {
         return {
@@ -41,10 +40,12 @@ export default {
         ,
         showPokemonTeam() {
             this.showTeam = true;
+        },
+        seeList(){
+            this.showTeam = false;
         }
     }
 }
 </script>
 
-<style>
-</style>
+<style></style>

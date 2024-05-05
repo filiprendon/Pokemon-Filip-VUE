@@ -4,15 +4,13 @@
       <h1 class="green">{{ msg }}</h1>
     </div>
     <div class="navbar-menu">
-      <button @click="showTeam">Mostrar Equipo Pokémon</button>
-      <!-- <PokemonTeam v-if="showTeam" :team="team" /> -->
+      <button v-if="showTeam" @click="showTeam">Mostrar Equipo Pokémon</button>
+      <button v-if="!showTeam" @click="goBack">Volver</button>
     </div>
   </nav>
 </template>
 
 <script>
-// import PokemonList from './PokemonList.vue'
-// import PokemonTeam from './PokemonTeam.vue'
 export default {
   props: {
     msg: String
@@ -20,7 +18,10 @@ export default {
 
   methods: {
     showTeam: function () {
-      this.$emit('showTeam')
+      this.$emit('show-team')
+    },
+    goBack(){
+      this.$emit('go-back')
     }
   }
 }
@@ -40,7 +41,7 @@ export default {
   padding: 10px 20px;
 }
 
-.navbar-brand {
+/* .navbar-brand {
   font-size: 1.5rem;
 }
 
@@ -53,9 +54,6 @@ export default {
   color: #fff;
   text-decoration: none;
   font-size: 1.2rem;
-}
+} */
 
-.navbar-item:hover {
-  text-decoration: underline;
-}
 </style>

@@ -1,4 +1,5 @@
 <template>
+    <h2 style="margin-top: 95px;">Pokedex</h2>
     <div class="pokemon-card" v-for="pokemon in pokemons" :key="pokemon.name" :class="pokemon.typeClass">
         <div class="pokemon-header">
             <h2 class="pokemon-name">{{ pokemon.name }}</h2>
