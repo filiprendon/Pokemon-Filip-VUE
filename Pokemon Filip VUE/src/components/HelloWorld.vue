@@ -1,44 +1,61 @@
-<script setup>
-defineProps({
-  msg: {
-    type: String,
-    required: true
-  }
-})
-</script>
-
 <template>
-  <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
-      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
-    </h3>
-  </div>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <h1 class="green">{{ msg }}</h1>
+    </div>
+    <div class="navbar-menu">
+      <button @click="showTeam">Mostrar Equipo Pokémon</button>
+      <!-- <PokemonTeam v-if="showTeam" :team="team" /> -->
+    </div>
+  </nav>
 </template>
 
+<script>
+// import PokemonList from './PokemonList.vue'
+// import PokemonTeam from './PokemonTeam.vue'
+export default {
+  props: {
+    msg: String
+  },
+
+  methods: {
+    showTeam: function () {
+      this.$emit('showTeam')
+    }
+  }
+}
+</script>
+
 <style scoped>
-h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
-  position: relative;
-  top: -10px;
+.navbar {
+  background-color: rgba(55, 97, 168, .5);
+  backdrop-filter: blur(15px);
+  position: fixed;
+  width: 100%;
+  z-index: 9999;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
 }
 
-h3 {
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+.navbar-menu {
+  display: flex;
+}
+
+.navbar-item {
+  margin-right: 20px;
+  color: #fff;
+  text-decoration: none;
   font-size: 1.2rem;
 }
 
-.greetings h1,
-.greetings h3 {
-  text-align: center;
-}
-
-@media (min-width: 1024px) {
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
-  }
+.navbar-item:hover {
+  text-decoration: underline;
 }
 </style>

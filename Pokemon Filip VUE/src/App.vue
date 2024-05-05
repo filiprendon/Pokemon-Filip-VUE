@@ -14,6 +14,9 @@ export default{
 </script>
 
 <template>
+  <header>
+    <HelloWorld></HelloWorld>
+  </header>
   <div>
   <PokedexApp></PokedexApp>
   </div>
