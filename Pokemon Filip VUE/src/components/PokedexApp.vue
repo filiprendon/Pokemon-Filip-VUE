@@ -5,9 +5,12 @@
     <div class="pokedex-container">
 
         <div class="content">
-            <PokemonList v-if="!showTeam" :pokemons="pokemons" @addTeam="addTeam" />
-            <PokemonTeam v-if="showTeam" :team="team"></PokemonTeam>
-            <PokemonFavs v-if="showFavs" :favs="favs"></PokemonFavs>
+            <div v-if="pokemons">
+                <PokemonList v-if="!showTeam && !showFavs" :pokemons="pokemons"
+                    @addTeam="addTeam" @addFavorite="addFavorite" />
+                <PokemonTeam v-if="showTeam && !favs" :team="team"></PokemonTeam>
+                <PokemonFavs v-if="showFavs" :favs="favs"></PokemonFavs>
+            </div>
         </div>
     </div>
 </template>
@@ -44,14 +47,19 @@ export default {
                 this.team.push(pokemon);
             }
         },
-        addFavorite() {
-            const pokemonInFavs = this.favs.some(p => p.id === pokemon.id);
-            if (pokemonInFavs) {
-                alert('El pokemon ya está en el equipo');
+        addFavorite(pokemon) {
+            const pokemonIndex = this.favs.findIndex(p => p.id === pokemon.id);
+            if (pokemonIndex !== -1) {
+                this.favs.splice(pokemonIndex, 1);
+                console.log(pokemon, ' Removed from favorites')
+                PokemonList.pokemonInFavs = false;
             } else {
                 this.favs.push(pokemon);
+                console.log(pokemon, ' Added to favorites')
+                PokemonList.pokemonInFavs = true;
             }
         },
+
         showPokemonTeam() {
             this.showTeam = true;
         },
