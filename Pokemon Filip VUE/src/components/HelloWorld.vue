@@ -4,8 +4,8 @@
       <h1 class="green">{{ msg }}</h1>
     </div>
     <div class="navbar-menu">
-      <button v-if="showTeam" @click="showTeam">Mostrar Equipo Pokémon</button>
-      <button v-if="!showTeam" @click="goBack">Volver</button>
+      <button @click="showTeam">Mostrar Equipo Pokémon</button>
+      <button @click="showFavs">Favoritos</button>
     </div>
   </nav>
 </template>
@@ -20,8 +20,8 @@ export default {
     showTeam: function () {
       this.$emit('show-team')
     },
-    goBack(){
-      this.$emit('go-back')
+    showFavs(){
+      this.$emit('show-favs')
     }
   }
 }

@@ -27,7 +27,8 @@ export default {
     data() {
         return {
             pokemons: [],
-            team: []
+            team: [],
+            favs: [],
         }
     },
     mounted() {
@@ -68,7 +69,7 @@ export default {
 
         }, 
         addFavorite: function (pokemon) {
-            console.log(JSON.parse(JSON.stringify(pokemon)))
+            this.$emit('addFavorite', pokemon);
         },
     }
 }
