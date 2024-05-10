@@ -86,36 +86,4 @@ export default {
 <style scoped>
 @import './CardStyle.css';
 
-
-.pokemon-card-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.pokemon-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px; /* Añadido para separar las cards */
-    flex: 1 0 30%; /* Añadido para definir el ancho de las cards */
-    max-width: calc(33.33% - 20px); /* Añadido para limitar el ancho de las cards */
-    box-sizing: border-box; /* Añadido para incluir el padding en el cálculo del ancho */
-}
-
-.pokemon-card img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
-
-.pokemon-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.pokemon-details {
-    text-align: center;
-}
 </style>

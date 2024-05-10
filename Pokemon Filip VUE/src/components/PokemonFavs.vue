@@ -1,5 +1,6 @@
 <template>
     <h2 style="margin-top: 95px;">Favourite Pokémons</h2>
+    <div class="pokemon-card-container">
     <div class="pokemon-card" v-for="pokemon in favs" :key="pokemon.name" :class="pokemon.typeClass">
         <div class="pokemon-header">
             <h2 class="pokemon-name">{{ pokemon.name }}</h2>
@@ -17,6 +18,7 @@
             <p class="pokemon-type">Type: {{ pokemon.type }}</p>
             <button class="remove-from-team-button" @click="removeFromTeam(pokemon)">Remove from team</button>
         </div> -->
+        </div>
     </div>
 </template>
 
