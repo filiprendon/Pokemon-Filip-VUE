@@ -1,10 +1,5 @@
 <template>
-  <!-- <nav>
-    <ul>
-      <li><button @click="$emit('show-team')">Ver Equipo</button></li>
-      <li><button @click="$emit('show-favs')">Ver Favoritos</button></li>
-    </ul>
-  </nav> -->
+  
 </template>
 
 <script>
@@ -22,4 +17,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

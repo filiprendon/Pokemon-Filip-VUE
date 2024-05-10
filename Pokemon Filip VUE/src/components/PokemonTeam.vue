@@ -1,5 +1,8 @@
 <template>
     <h2 style="margin-top: 95px;">Your team</h2>
+    <div v-if="team.length === 0">
+        <p>You don't have Pokemons in your team.</p>
+    </div>
     <div class="pokemon-card" v-for="pokemon in team" :key="pokemon.name" :class="pokemon.typeClass" v-if="team.length = 2">
         <div class="pokemon-header">
             <h2 class="pokemon-name">{{ pokemon.name }}</h2>

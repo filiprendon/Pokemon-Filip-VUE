@@ -1,20 +1,20 @@
 <template>
     <nav>
         <ul>
-            <li><button @click="showPokemonTeam">Ver Equipo</button></li>
-            <li><button @click="showPokemonFavs">Ver Favoritos</button></li>
-            <li><button @click="pokeShop">Poke Shop</button></li>
+            <li><button @click="toggleView('list')">Show list</button></li>
+            <li><button @click="toggleView('team')">Team</button></li>
+            <li><button @click="toggleView('favs')">Favourites</button></li>
+            <li><button @click="toggleView('shop')">Poke Shop</button></li>
         </ul>
     </nav>
-    <h3> {{ mensaje }}</h3>
     <div class="pokedex-container">
 
         <div class="content">
             <div v-if="pokemons">
-                <PokemonList v-if="!showTeam && !showFavs" :pokemons="pokemons" @addTeam="addTeam"
-                    @addFavorite="addFavorite" />
-                <PokemonTeam v-if="showTeam && !favs" :team="team"></PokemonTeam>
-                <PokemonFavs v-if="showFavs" :favs="favs"></PokemonFavs>
+                <PokemonList v-if="showList" :pokemons="pokemons" @addTeam="addTeam" @addFavorite="addFavorite" />
+                <PokemonTeam v-else-if="showTeam" :team="team"></PokemonTeam>
+                <PokemonFavs v-else-if="showFavs" :favs="favs"></PokemonFavs>
+                <PokeShop v-else-if="showShop" :items="items"></PokeShop>
             </div>
         </div>
     </div>
@@ -25,15 +25,17 @@ import HelloWorld from './HelloWorld.vue'
 import PokemonList from './PokemonList.vue'
 import PokemonTeam from './PokemonTeam.vue'
 import PokemonFavs from './PokemonFavs.vue'
+import PokeShop from './PokeShop.vue'
 export default {
     props: {
-    mensaje: String
-  },
+        mensaje: String
+    },
     components: {
         PokemonList,
         PokemonTeam,
         PokemonFavs,
-        HelloWorld
+        HelloWorld,
+        PokeShop
     },
     data() {
         return {
@@ -42,6 +44,8 @@ export default {
             favs: [],
             showTeam: false,
             showFavs: false,
+            showShop: false,
+            showList: true,
         }
     },
     mounted() {
@@ -59,24 +63,22 @@ export default {
             const pokemonIndex = this.favs.findIndex(p => p.id === pokemon.id);
             if (pokemonIndex !== -1) {
                 this.favs.splice(pokemonIndex, 1);
-                console.log(pokemon, ' Removed from favorites')
+                console.log(pokemon, ' Removed from favorites');
                 PokemonList.pokemonInFavs = false;
             } else {
                 this.favs.push(pokemon);
-                console.log(pokemon, ' Added to favorites')
+                console.log(pokemon, ' Added to favorites');
                 PokemonList.pokemonInFavs = true;
             }
         },
 
-        showPokemonTeam() {
-            this.showTeam = true;
+        toggleView(view) {
+            this.showList = view === 'list';
+            this.showTeam = view === 'team';
+            this.showFavorites = view === 'favs';
+            this.showShop = view === 'shop';
         },
-        showPokemonFavs() {
-            this.showFavs = true;
-        },
-        seeList() {
-            this.showTeam = false;
-        }
+
     }
 }
 </script>
