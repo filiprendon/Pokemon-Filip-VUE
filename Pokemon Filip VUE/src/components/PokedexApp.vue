@@ -7,7 +7,7 @@
             <li><button @click="toggleView('shop')">Poke Shop</button></li>
         </ul>
     </nav> -->
-    <HelloWorld @toggle-view="toggleView"></HelloWorld>
+    <HelloWorld @toggle-view="toggleView" :pokemons="pokemons" @filter="handleCheckbox" />
     <div class="pokedex-container">
         <div class="content">
             <div v-if="pokemons">
@@ -29,7 +29,11 @@ import PokemonFavs from './PokemonFavs.vue'
 import PokeShop from './PokeShop.vue'
 export default {
     props: {
-        mensaje: String
+        mensaje: String,
+        pokemons: {
+            type: Array,
+            required: true,
+        }
     },
     components: {
         PokemonList,

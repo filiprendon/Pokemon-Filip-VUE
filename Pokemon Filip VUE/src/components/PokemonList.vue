@@ -27,11 +27,16 @@
 </template>
 
 <script>
+import HelloWorld from './HelloWorld.vue';
 
 export default {
+    components: {
+        HelloWorld,
+    },
+
     data() {
         return {
-            pokemons: null,
+            pokemons: [],
             team: [],
             favs: [],
         }
@@ -85,5 +90,4 @@ export default {
 </script>
 <style scoped>
 @import './CardStyle.css';
-
 </style>
