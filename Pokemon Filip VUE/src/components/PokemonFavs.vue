@@ -1,7 +1,7 @@
 <template>
     <h2 style="margin-top: 95px;">Favourite Pokémons</h2>
     <div v-if="favs.length === 0">
-        <p>No hay Pokémon favoritos.</p>
+        <h2>No hay</h2>
     </div>
     <div v-else class="pokemon-card-container">
         <div class="pokemon-card" v-for="pokemon in favs" :key="pokemon.name" :class="pokemon.typeClass">
@@ -33,12 +33,7 @@ export default {
     components: {
 
     },
-    props: {
-        favs: {
-            type: Array,
-            required: true,
-        }
-    }
+    props: ['favs']
 }
 </script>
 
@@ -50,5 +45,4 @@ export default {
     cursor: pointer;
     content: "\f771";
 }
-
 </style>

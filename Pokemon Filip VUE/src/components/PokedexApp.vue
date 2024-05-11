@@ -9,7 +9,6 @@
     </nav> -->
     <HelloWorld @toggle-view="toggleView"></HelloWorld>
     <div class="pokedex-container">
-
         <div class="content">
             <div v-if="pokemons">
                 <PokemonList v-if="showList" :pokemons="pokemons" @addTeam="addTeam" @addFavorite="addFavorite" />
@@ -22,6 +21,7 @@
 </template>
 
 <script>
+
 import HelloWorld from './HelloWorld.vue'
 import PokemonList from './PokemonList.vue'
 import PokemonTeam from './PokemonTeam.vue'
@@ -52,7 +52,7 @@ export default {
     mounted() {
     },
     methods: {
-        addTeam: function (pokemon) {
+        addTeam(pokemon) {
             const pokemonInTeam = this.team.some(p => p.id === pokemon.id);
             if (pokemonInTeam) {
                 alert('El pokemon ya está en el equipo');
@@ -76,7 +76,7 @@ export default {
         toggleView(view) {
             this.showList = view === 'list';
             this.showTeam = view === 'team';
-            this.showFavorites = view === 'favs';
+            this.showFavs = view === 'favs';
             this.showShop = view === 'shop';
         },
 
@@ -84,6 +84,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

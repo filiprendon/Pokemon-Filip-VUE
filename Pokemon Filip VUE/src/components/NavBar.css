@@ -5,7 +5,6 @@ nav {
 ul {
     list-style-type: none;
     margin: 0;
-    padding: 0;
 }
 
 li {
@@ -20,11 +19,16 @@ button {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    /* margin: 4px 2px; */
     cursor: pointer;
-    padding: 10px 20px;
+    padding: 20px;
 }
 
 button:hover {
     background-color: #45a049;
+}
+
+.navBtns{
+    display: flex;
+    justify-content: space-between;
 }
