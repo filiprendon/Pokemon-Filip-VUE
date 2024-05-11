@@ -71,10 +71,12 @@ h2 {
 
 
 .pokemon-details {
+    /* display: flex; */
     padding: 20px;
 }
 
 .pokemon-type {
+    display: flex;
     margin-bottom: 10px;
     font-size: 14px;
 }
@@ -111,4 +113,33 @@ h2 {
     background-color: rgb(209, 71, 17);
     color: #FECA1A;
     transition: background-color .5s ease;
+}
+
+.pokemon-card-container {
+    padding: 150px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pokemon-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    flex: 1 0 30%;
+    max-width: calc(33.33% - 20px);
+    box-sizing: border-box;
+}
+
+.pokemon-card img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.pokemon-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
