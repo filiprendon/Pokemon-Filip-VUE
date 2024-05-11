@@ -1,6 +1,6 @@
 <template>
     <HelloWorld @show-team="showPokemonTeam" @go-back="seeList">
-        <button v-if="!showTeam" @click="goBack">Volver</button></HelloWorld>
+        <button v-if="!showTeam" @click="goBack">Volver</button></HelloWorld>/>
     <div class="pokedex-container">
 
         <div class="content">
