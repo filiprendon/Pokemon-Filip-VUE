@@ -1,6 +1,9 @@
 <script>
 import HelloWorld from './components/HelloWorld.vue'
 import PokemonList from './components/PokemonList.vue'
+import PokemonTeam from './components/PokemonTeam.vue'
+import PokemonFavs from './components/PokemonFavs.vue'
+import PokeShop from './components/PokeShop.vue'
 import PokedexApp from './components/PokedexApp.vue'
 
 export default{
@@ -14,9 +17,9 @@ export default{
 </script>
 
 <template>
-  <header>
+  <!-- <header>
     <HelloWorld></HelloWorld>
-  </header>
+  </header> -->
   <div>
   <PokedexApp></PokedexApp>
   </div>

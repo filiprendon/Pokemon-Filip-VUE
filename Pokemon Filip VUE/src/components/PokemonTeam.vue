@@ -1,9 +1,8 @@
 <template>
-    <h2 style="margin-top: 95px;">Your team</h2>
-    <div v-if="team.length === 0">
-        <p>You don't have Pokemons in your team.</p>
-    </div>
-    <div class="pokemon-card" v-for="pokemon in team" :key="pokemon.name" :class="pokemon.typeClass" v-if="team.length = 2">
+    <!-- <div v-if="pokemons"> -->
+        <h2 style="margin-top: 95px;">Your team</h2>
+        <div class="pokemon-card-container">
+        <div class="pokemon-card" v-for="pokemon in team" :key="pokemon.name" :class="pokemon.typeClass" v-if="team.length = 6">
         <div class="pokemon-header">
             <h2 class="pokemon-name">{{ pokemon.name }}</h2>
             <h2 class="pokemon-id">Nº {{ pokemon.id }}</h2>
@@ -20,8 +19,27 @@
             <p class="pokemon-type">Type: {{ pokemon.type }}</p>
             <button class="remove-from-team-button" @click="removeFromTeam(pokemon)">Remove from team</button>
         </div>
+    <!-- </div> -->
     </div>
+    </div>
+    
 </template>
+<!-- <template>
+    <div v-if="items">
+        <h2 style="margin-top: 95px;">Poke Shop</h2>
+        <div class="pokemon-card-container">
+            <div class="pokemon-card" v-for="item in items" :key="item.name">
+                <div class="pokemon-header">
+                    <h2 class="pokemon-name">{{ item.name }}</h2>
+                    <h3 class="pokemon-id"> {{ item.cost }}</h3>
+                </div>
+                <div class="pokemon-image">
+                    <img :src="item.imageUrl" :title="item.altText">
+                </div>
+            </div>
+        </div>
+    </div>
+</template> -->
 
 <script>
 export default {
@@ -30,7 +48,5 @@ export default {
 </script>
 
 <style scoped>
-
 @import './CardStyle.css';
-
 </style>
