@@ -1,55 +1,35 @@
 <template>
-    <div>
-      <h3>Inventory</h3>
-      <div v-for="item in inventoryItems" :key="item.name">
-        {{ item.name }} - Quantity: {{ item.quantity }}
+  <div v-if="inventoryItems">
+    <h2 style="margin-top: 95px; margin-left: 150px">Inventario</h2>
+    <div class="pokemon-card-container">
+      <div class="pokemon-card" v-for="item in inventoryItems" :key="item.name">
+        <div class="pokemon-header">
+          <h2 class="pokemon-name">{{ item.name }}</h2>
+          <h3 class="pokemon-id">Cantidad: {{ item.quantity }}</h3>
+        </div>
+        <div class="pokemon-image">
+          <!-- Puedes mostrar una imagen del objeto si lo deseas -->
+        </div>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      items: {
-        type: Array,
-        required: true
-      }
-    },
-    data() {
-      return {
-        inventoryItems: []
-      };
-    },
-    created() {
-      // Inicializar el inventario con la cantidad de cada artículo que el jugador tiene
-      this.items.forEach(item => {
-        this.inventoryItems.push({ name: item.name, quantity: 0 });
-      });
-    },
-    methods: {
-      // Método para actualizar la cantidad de un artículo en el inventario
-      updateQuantity(itemName, quantity) {
-        const itemIndex = this.inventoryItems.findIndex(item => item.name === itemName);
-        if (itemIndex !== -1) {
-          this.inventoryItems[itemIndex].quantity += quantity;
-        }
-      }
-    },
-    watch: {
-      // Vigilar los cambios en el inventario para actualizar la cantidad de los artículos
-      items: {
-        handler(newItems) {
-          newItems.forEach((item, index) => {
-            this.inventoryItems[index].name = item.name;
-            // Si el artículo es nuevo, añadirlo al inventario con una cantidad inicial de 0
-            if (index >= this.inventoryItems.length) {
-              this.inventoryItems.push({ name: item.name, quantity: 0 });
-            }
-          });
-        },
-        deep: true
-      }
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    inventoryItems: {
+      type: Array,
+      required: true
     }
-  };
-  </script>
-  
+  },
+  mounted(){
+    console.log(this.inventoryItems)
+  }
+};
+</script>
+
+<style scoped>
+@import './CardStyle.css';
+
+</style>

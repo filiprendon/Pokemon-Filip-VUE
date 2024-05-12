@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import HelloWorld from './HelloWorld.vue';
+import NavComp from './NavComp.vue';
 
 export default {
     props: {

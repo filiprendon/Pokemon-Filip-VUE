@@ -7,7 +7,7 @@
           <li><button @click="toggleView('shop')">Poke Shop</button></li>
       </ul>
   </nav> -->
-  <HelloWorld @toggle-view="toggleView" :pokemons="pokemons" :team="team" @filter="handleCheckbox" />
+  <NavComp @toggle-view="toggleView" :pokemons="pokemons" :team="team" @filter="handleCheckbox" />
   <div class="pokedex-container">
     <div class="content">
       <div v-if="pokemons">
@@ -16,7 +16,8 @@
         <PokemonTeam v-else-if="showTeam && team.length >= 6" :team="team" @addFavorite="addFavorite"
           @removeTeam="removeTeam"></PokemonTeam>
         <PokemonFavs v-else-if="showFavs" :favs="favs" @addFavorite="addFavorite" @addTeam="addTeam" @removeTeam="removeTeam"></PokemonFavs>
-        <PokeShop v-else-if="showShop" :items="items"></PokeShop>
+        <PokeShop v-else-if="showShop" :items="items" @addToInventory="addInventory" ></PokeShop>
+        <Inventory v-else-if="showInventory" :inventoryItems="inventoryItems"></Inventory>
       </div>
     </div>
   </div>
@@ -24,11 +25,12 @@
 
 <script>
 
-import HelloWorld from './components/HelloWorld.vue'
+import NavComp from './components/NavComp.vue'
 import PokemonList from './components/PokemonList.vue'
 import PokemonTeam from './components/PokemonTeam.vue'
 import PokemonFavs from './components/PokemonFavs.vue'
 import PokeShop from './components/PokeShop.vue'
+import Inventory from './components/Inventory.vue'
 export default {
   props: {
     mensaje: String,
@@ -37,18 +39,21 @@ export default {
     PokemonList,
     PokemonTeam,
     PokemonFavs,
-    HelloWorld,
-    PokeShop
+    NavComp,
+    PokeShop,
+    Inventory,
   },
   data() {
     return {
       pokemons: [],
       team: [],
       favs: [],
+      inventoryItems: [],
       showTeam: false,
       showFavs: false,
       showShop: false,
       showList: true,
+      showInventory: false,
       pokemonInFavs: false,
       // pokemonInTeam: false,
     }
@@ -131,7 +136,12 @@ export default {
       this.showTeam = view === 'team';
       this.showFavs = view === 'favs';
       this.showShop = view === 'shop';
+      this.showInventory = view === 'inventory';
     },
+    addInventory(item){
+      console.log(item, ' Comprado');
+      this.inventoryItems.push(item)
+    }
 
   }
 }

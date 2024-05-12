@@ -12,8 +12,8 @@
                     <img :src="item.imageUrl" :title="item.altText">
                 </div>
                 <div class="buyBtn">
-                    <button class="buy" @click="buyItem(item.name, -1)">-</button>
-                    <button class="buy" @click="buyItem(item.name, 1)">+</button>
+                    <button class="buy" @click="buyItem(item, -1)">-</button>
+                    <button class="buy" @click="buyItem(item, 1)">+</button>
                 </div>
             </div>
         </div>
@@ -39,6 +39,8 @@ export default {
                     cost: null,
                     quantity: 0
                 }));
+                // Esto lo hago ya que al hacer un fetch con la url nada más me devuelve muy pocos datos
+                // Es como hacer 'https://pokeapi.co/api/v2/item/ID' en vez de 'https://pokeapi.co/api/v2/item'
                 return Promise.all(data.results.map(item => fetch(item.url)));
             })
             .then(responses => Promise.all(responses.map(response => response.json())))
@@ -50,14 +52,14 @@ export default {
                 })
             })
             .catch(error => console.log(error));
-    }
-    ,
+    },
     methods: {
         buyItem(name, total) {
-            const itemIndex = this.items.findIndex(item => item.name === name);
+            const itemIndex = this.items.findIndex(item => item.id === id);
             if (itemIndex !== -1) {
                 this.items[itemIndex].quantity += total;
                 console.log(`Cantidad ${name}: ${this.items[itemIndex].quantity}`);
+                this.$emit('addToInventory', item);
             }
         }
 
