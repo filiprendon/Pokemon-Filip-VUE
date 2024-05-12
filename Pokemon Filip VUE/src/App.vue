@@ -7,16 +7,17 @@
           <li><button @click="toggleView('shop')">Poke Shop</button></li>
       </ul>
   </nav> -->
-  <NavComp @toggle-view="toggleView" :pokemons="pokemons" :team="team" @filter="handleCheckbox" />
+  <NavComp @toggle-view="toggleView" :pokemons="pokemons" :team="team" @filter="handleCheckbox" @filterSearch="filterSearch"/>
   <div class="pokedex-container">
     <div class="content">
       <div v-if="pokemons">
         <PokemonList v-if="showList || showTeam && team.length < 6" :pokemonInFavs="pokemonInFavs" :pokemons="pokemons"
-          @addTeam="addTeam" @addFavorite="addFavorite" @removeTeam="removeTeam" />
+          @addTeam="addTeam" @addFavorite="addFavorite" @removeTeam="removeTeam" @filterType="filterType" />
         <PokemonTeam v-else-if="showTeam && team.length >= 6" :team="team" @addFavorite="addFavorite"
           @removeTeam="removeTeam"></PokemonTeam>
-        <PokemonFavs v-else-if="showFavs" :favs="favs" @addFavorite="addFavorite" @addTeam="addTeam" @removeTeam="removeTeam"></PokemonFavs>
-        <PokeShop v-else-if="showShop" :items="items" @addToInventory="addInventory" ></PokeShop>
+        <PokemonFavs v-else-if="showFavs" :favs="favs" @addFavorite="addFavorite" @addTeam="addTeam"
+          @removeTeam="removeTeam"></PokemonFavs>
+        <PokeShop v-else-if="showShop" :items="items" @addToInventory="addInventory"></PokeShop>
         <Inventory v-else-if="showInventory" :inventoryItems="inventoryItems"></Inventory>
       </div>
     </div>
@@ -49,12 +50,14 @@ export default {
       team: [],
       favs: [],
       inventoryItems: [],
+      items: [],
       showTeam: false,
       showFavs: false,
       showShop: false,
       showList: true,
       showInventory: false,
       pokemonInFavs: false,
+      filterType: '',
       // pokemonInTeam: false,
     }
   },
@@ -81,7 +84,32 @@ export default {
         console.log(pokemonData)
       })
       .catch(error => console.log(error));
+    fetch('https://pokeapi.co/api/v2/item')
+      .then(response => response.json())
+      .then(data => {
+        this.items = data.results.map(item => ({
+          name: item.name,
+          imageUrl: null,
+          altText: null,
+          cost: null,
+          quantity: 0
+        }));
+        // Esto lo hago ya que al hacer un fetch con la url nada más me devuelve muy pocos datos
+        // Es como hacer 'https://pokeapi.co/api/v2/item/ID' en vez de 'https://pokeapi.co/api/v2/item'
+        return Promise.all(data.results.map(item => fetch(item.url)));
+      })
+      .then(responses => Promise.all(responses.map(response => response.json())))
+      .then(itemData => {
+        this.items.forEach((item, i) => {
+          item.imageUrl = itemData[i].sprites.default;
+          item.altText = itemData[i].effect_entries[0].short_effect;
+          item.cost = itemData[i].cost;
+        })
+      })
+      .catch(error => console.log(error));
+
   },
+
   methods: {
     customClasses: function (type) {
       const classes = {
@@ -93,7 +121,11 @@ export default {
       return classes;
 
     },
-
+    filterSearch(type){
+      this.showList = true;
+      this.filterType = type;
+      console.log(this.filterType)
+    },
     addTeam(pokemon) {
       // const pokemonInTeam = this.team.some(p => p.id === pokemon.id);
       if (this.team.length == 6) {
@@ -138,10 +170,18 @@ export default {
       this.showShop = view === 'shop';
       this.showInventory = view === 'inventory';
     },
-    addInventory(item){
-      console.log(item, ' Comprado');
-      this.inventoryItems.push(item)
+    addInventory(item) {
+      const existingItemIndex = this.inventoryItems.findIndex(i => i.id === item.id);
+      if (existingItemIndex !== -1) {
+        this.inventoryItems[existingItemIndex].quantity += item.quantity;
+        console.log('Quantity updated for:', item.name);
+      } else {
+        this.inventoryItems.push(item);
+        console.log('Item added:', item.name);
+      }
     }
+
+
 
   }
 }

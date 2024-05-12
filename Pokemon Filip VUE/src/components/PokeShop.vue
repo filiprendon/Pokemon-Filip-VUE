@@ -13,7 +13,7 @@
                 </div>
                 <div class="buyBtn">
                     <button class="buy" @click="buyItem(item, -1)">-</button>
-                    <button class="buy" @click="buyItem(item, 1)">+</button>
+                    <button class="buy" @click="buyItem(item)">+</button>
                 </div>
             </div>
         </div>
@@ -23,46 +23,52 @@
 <script>
 
 export default {
+    props: {
+        items: {
+            type: Array,
+            required: true,
+        }
+    },
     data() {
-        return {
-            items: null,
-        }
+        // return {
+        //     items: null,
+        // }
     },
-    mounted() {
-        fetch('https://pokeapi.co/api/v2/item')
-            .then(response => response.json())
-            .then(data => {
-                this.items = data.results.map(item => ({
-                    name: item.name,
-                    imageUrl: null,
-                    altText: null,
-                    cost: null,
-                    quantity: 0
-                }));
-                // Esto lo hago ya que al hacer un fetch con la url nada más me devuelve muy pocos datos
-                // Es como hacer 'https://pokeapi.co/api/v2/item/ID' en vez de 'https://pokeapi.co/api/v2/item'
-                return Promise.all(data.results.map(item => fetch(item.url)));
-            })
-            .then(responses => Promise.all(responses.map(response => response.json())))
-            .then(itemData => {
-                this.items.forEach((item, i) => {
-                    item.imageUrl = itemData[i].sprites.default;
-                    item.altText = itemData[i].effect_entries[0].short_effect;
-                    item.cost = itemData[i].cost;
-                })
-            })
-            .catch(error => console.log(error));
-    },
+    // mounted() {
+    //     fetch('https://pokeapi.co/api/v2/item')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             this.items = data.results.map(item => ({
+    //                 name: item.name,
+    //                 imageUrl: null,
+    //                 altText: null,
+    //                 cost: null,
+    //                 quantity: 0
+    //             }));
+    //             // Esto lo hago ya que al hacer un fetch con la url nada más me devuelve muy pocos datos
+    //             // Es como hacer 'https://pokeapi.co/api/v2/item/ID' en vez de 'https://pokeapi.co/api/v2/item'
+    //             return Promise.all(data.results.map(item => fetch(item.url)));
+    //         })
+    //         .then(responses => Promise.all(responses.map(response => response.json())))
+    //         .then(itemData => {
+    //             this.items.forEach((item, i) => {
+    //                 item.imageUrl = itemData[i].sprites.default;
+    //                 item.altText = itemData[i].effect_entries[0].short_effect;
+    //                 item.cost = itemData[i].cost;
+    //             })
+    //         })
+    //         .catch(error => console.log(error));
+    // },
     methods: {
-        buyItem(name, total) {
-            const itemIndex = this.items.findIndex(item => item.id === id);
-            if (itemIndex !== -1) {
-                this.items[itemIndex].quantity += total;
-                console.log(`Cantidad ${name}: ${this.items[itemIndex].quantity}`);
+        buyItem(item) {
+            // const itemIndex = this.items.findIndex(item => item.name === name);
+            // if (itemIndex !== -1) {
+            //     this.items[itemIndex].quantity += total;
+            //     console.log(`Cantidad ${name}: ${this.items[itemIndex].quantity}`);
+                // Emitir el evento con el objeto completo del ítem
                 this.$emit('addToInventory', item);
-            }
+            // }
         }
-
     },
 }
 

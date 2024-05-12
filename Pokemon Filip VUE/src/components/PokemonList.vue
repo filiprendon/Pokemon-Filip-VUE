@@ -42,6 +42,10 @@ export default {
         pokemonInFavs: {
             type: Boolean,
             required: true,
+        },
+        filterType: {
+            type: String,
+            required: true,
         }
     },
 

@@ -5,10 +5,10 @@
       <div class="pokemon-card" v-for="item in inventoryItems" :key="item.name">
         <div class="pokemon-header">
           <h2 class="pokemon-name">{{ item.name }}</h2>
-          <h3 class="pokemon-id">Cantidad: {{ item.quantity }}</h3>
+          <h3 class="pokemon-id">{{ item.quantity }}</h3>
         </div>
         <div class="pokemon-image">
-          <!-- Puedes mostrar una imagen del objeto si lo deseas -->
+          <img :src="item.imageUrl" :title="item.altText">
         </div>
       </div>
     </div>
@@ -23,7 +23,7 @@ export default {
       required: true
     }
   },
-  mounted(){
+  mounted() {
     console.log(this.inventoryItems)
   }
 };
@@ -31,5 +31,4 @@ export default {
 
 <style scoped>
 @import './CardStyle.css';
-
 </style>

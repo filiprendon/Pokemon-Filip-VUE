@@ -16,8 +16,8 @@
               d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5" />
           </svg>
         </button>
-        <button class="btn btn-secondary" @click="toggle('inventory')"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
-            class="bi bi-backpack2" viewBox="0 0 16 16">
+        <button class="btn btn-secondary" @click="toggle('inventory')"><svg xmlns="http://www.w3.org/2000/svg"
+            width="32" height="32" fill="currentColor" class="bi bi-backpack2" viewBox="0 0 16 16">
             <path d="M4.04 7.43a4 4 0 0 1 7.92 0 .5.5 0 1 1-.99.14 3 3 0 0 0-5.94 0 .5.5 0 1 1-.99-.14" />
             <path fill-rule="evenodd"
               d="M4 9.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm1 .5v3h6v-3h-1v.5a.5.5 0 0 1-1 0V10z" />
@@ -58,7 +58,7 @@ export default {
   data() {
     return {
       isOpen: false,
-      pokemonTypes: []
+      pokemonTypes: [],
     };
   },
 
@@ -72,13 +72,13 @@ export default {
       }
 
     },
-
     toggleDropdown() {
       this.pokemonTypes = [...new Set(this.pokemons.map(pokemon => pokemon.type))];
       this.isOpen = !this.isOpen;
     },
     filterByType(type) {
-      console.log(`Filtrando por tipo: ${type}`);
+      this.$emit('filterSearch', type);
+      console.log(type);
     },
   },
   computed: {
