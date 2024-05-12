@@ -33,7 +33,14 @@ export default {
     components: {
 
     },
-    props: ['favs']
+    props: ['favs'],
+    methods: {
+        addFavorite: function (pokemon) {
+            // actualizamos para que si se quita desde el apartado de favoritos se actualize en la lista
+            pokemon.isFavorite = !pokemon.isFavorite;
+            this.$emit('addFavorite', pokemon);
+        },
+    }
 }
 </script>
 

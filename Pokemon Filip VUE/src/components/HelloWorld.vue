@@ -44,7 +44,11 @@ export default {
     pokemons: {
       type: Array,
       required: true
-    }
+    },
+    team: {
+      type: Array,
+      required: true
+    },
   },
 
   data() {
@@ -67,7 +71,13 @@ export default {
 
   methods: {
     toggle(view) {
-      this.$emit('toggle-view', view);
+      if (this.team.length < 6 && view ==='team') {
+        alert('Puedes ver tu equipo cuando tengas 6 Pokémons, actualmente tienes ' + this.team.length);
+        return;
+      } else {
+        this.$emit('toggle-view', view);
+      }
+
     },
 
     toggleDropdown() {
