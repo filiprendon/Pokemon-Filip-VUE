@@ -16,6 +16,7 @@
               d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5m0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5" />
           </svg>
         </button>
+        <button @click="nword">OK</button>
 
         <ul class="dropdown-menu" @click.stop>
           <li v-for="(type, index) in pokemonTypes" :key="index">
@@ -24,10 +25,6 @@
               {{ type }}
             </label>
           </li>
-          <!-- <li v-for="(type, index) in pokemons">
-            <input :id="index" type="checkbox" :value="type">
-            <label :for="index">{{ type }}</label>
-          </li> -->
         </ul>
       </div>
 
@@ -58,20 +55,9 @@ export default {
     };
   },
 
-  mounted() {
-    console.log(this.pokemons);
-    fetch('https://pokeapi.co/api/v2/type')
-      .then(response => response.json())
-      .then(data => {
-        const types = data.results.map(type => type.name);
-        this.pokemonTypes = types;
-      })
-      .catch(error => console.log(error));
-  },
-
   methods: {
     toggle(view) {
-      if (this.team.length < 6 && view ==='team') {
+      if (this.team.length < 6 && view === 'team') {
         alert('Puedes ver tu equipo cuando tengas 6 Pokémons, actualmente tienes ' + this.team.length);
         return;
       } else {
@@ -81,12 +67,24 @@ export default {
     },
 
     toggleDropdown() {
+      this.pokemonTypes = [...new Set(this.pokemons.map(pokemon => pokemon.type))];
       this.isOpen = !this.isOpen;
     },
     filterByType(type) {
       console.log(`Filtrando por tipo: ${type}`);
+    },
+  },
+  computed: {
+    pokemonsFiltrados() {
+      if (this.pokemonTypes.length === 0) {
+        return this.pokemons;
+      } else {
+        return this.pokemons.filter(pokemon =>
+          this.pokemonTypes.includes(pokemon.type)
+        );
+      }
     }
-  }
+  },
 };
 </script>
 

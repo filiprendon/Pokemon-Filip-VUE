@@ -1,6 +1,6 @@
 <template>
     <!-- <div v-if="pokemons"> -->
-    <h2 style="margin-top: 95px;">Your team</h2>
+    <h2 style="margin-top: 95px; margin-left: 150px">Your team</h2>
     <div v-if="team.length === 0">
         <h1>No hay</h1>
     </div>

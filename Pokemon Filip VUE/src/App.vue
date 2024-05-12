@@ -11,11 +11,11 @@
   <div class="pokedex-container">
     <div class="content">
       <div v-if="pokemons">
-        <PokemonList v-if="showList || showTeam && team.length < 6" :pokemonInFavs="pokemonInFavs" :pokemons="pokemons" @addTeam="addTeam"
-          @addFavorite="addFavorite" @removeTeam="removeTeam"/>
+        <PokemonList v-if="showList || showTeam && team.length < 6" :pokemonInFavs="pokemonInFavs" :pokemons="pokemons"
+          @addTeam="addTeam" @addFavorite="addFavorite" @removeTeam="removeTeam" />
         <PokemonTeam v-else-if="showTeam && team.length >= 6" :team="team" @addFavorite="addFavorite"
           @removeTeam="removeTeam"></PokemonTeam>
-        <PokemonFavs v-else-if="showFavs" :favs="favs" @addFavorite="addFavorite"></PokemonFavs>
+        <PokemonFavs v-else-if="showFavs" :favs="favs" @addFavorite="addFavorite" @addTeam="addTeam" @removeTeam="removeTeam"></PokemonFavs>
         <PokeShop v-else-if="showShop" :items="items"></PokeShop>
       </div>
     </div>
@@ -90,12 +90,16 @@ export default {
     },
 
     addTeam(pokemon) {
-      const pokemonInTeam = this.team.some(p => p.id === pokemon.id);
-      if (pokemonInTeam) {
-        alert('El pokemon ya está en el equipo');
+      // const pokemonInTeam = this.team.some(p => p.id === pokemon.id);
+      if (this.team.length == 6) {
+        alert('Ya has alcanzado el número máximo de Pokémons, si quieres añadir otro primero tendrás que eliminar a uno que ya tengas en el equipo')
       } else {
+        // actualizo aquí, si lo hago en la funcion addToTeam se cambia el boton aunque salga el mensaje
+        pokemon.inTeam = !pokemon.inTeam;
         this.team.push(pokemon);
       }
+
+
     },
     removeTeam(pokemon) {
       const pokemonIndex = this.team.findIndex(p => p.id === pokemon.id);
@@ -133,4 +137,6 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+@import './components/CardStyle.css';
+</style>

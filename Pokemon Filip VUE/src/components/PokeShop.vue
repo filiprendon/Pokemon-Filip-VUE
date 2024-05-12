@@ -1,6 +1,6 @@
 <template>
     <div v-if="items">
-        <h2 style="margin-top: 95px;">Poke Shop</h2>
+        <h2 style="margin-top: 95px; margin-left: 150px">Poke Shop</h2>
         <div class="pokemon-card-container">
             <div class="pokemon-card" v-for="item in items" :key="item.name">
                 <div class="pokemon-header">

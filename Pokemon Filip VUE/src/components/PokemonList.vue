@@ -1,6 +1,6 @@
 <template>
     <div v-if="pokemons">
-        <h2 style="margin-top: 95px;">Pokedex</h2>
+        <h2 style="margin-top: 95px; margin-left: 150px">Pokedex</h2>
         <div class="pokemon-card-container">
             <div class="pokemon-card" v-for="pokemon in pokemons" :key="pokemon.name" :class="pokemon.typeClass">
                 <div class="pokemon-header">
@@ -54,7 +54,7 @@ export default {
     },
     methods: {
         addToTeam: function (pokemon) {
-            pokemon.inTeam = !pokemon.inTeam;
+            
             this.$emit('addTeam', pokemon);
         },
         removeFromTeam: function(pokemon){

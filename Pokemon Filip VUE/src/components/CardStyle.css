@@ -81,6 +81,13 @@ h2 {
     font-size: 14px;
 }
 
+/* .pokedex-container{
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+
 .add-to-team-button {
     background-color: #FECA1A;
     color: rgb(55, 97, 168);
