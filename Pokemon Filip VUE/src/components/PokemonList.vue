@@ -1,8 +1,8 @@
 <template>
-    <div v-if="pokemons">
+    <div v-if="pokemonFilter">
         <h2 style="margin-top: 95px; margin-left: 150px">Pokedex</h2>
         <div class="pokemon-card-container">
-            <div class="pokemon-card" v-for="pokemon in pokemons" :key="pokemon.name" :class="pokemon.typeClass">
+            <div class="pokemon-card" v-for="pokemon in pokemonFilter" :key="pokemon.name" :class="pokemon.typeClass">
                 <div class="pokemon-header">
                     <h2 class="pokemon-name">{{ pokemon.name }}</h2>
                     <h2 class="pokemon-id">Nº {{ pokemon.id }}</h2>
@@ -22,8 +22,10 @@
                 </div>
                 <div class="pokemon-details">
                     <p class="pokemon-type">Type: {{ pokemon.type }}</p>
-                    <button v-if="!pokemon.inTeam" class="add-to-team-button" @click="addToTeam(pokemon)">Add to Team</button>
-                    <button v-else class="remove-from-team-button" @click="removeFromTeam(pokemon)">Remove From Team</button>
+                    <button v-if="!pokemon.inTeam" class="add-to-team-button" @click="addToTeam(pokemon)">Add to
+                        Team</button>
+                    <button v-else class="remove-from-team-button" @click="removeFromTeam(pokemon)">Remove From
+                        Team</button>
                 </div>
             </div>
         </div>
@@ -32,6 +34,7 @@
 
 <script>
 import NavComp from './NavComp.vue';
+
 
 export default {
     props: {
@@ -43,9 +46,18 @@ export default {
             type: Boolean,
             required: true,
         },
+        pokemonFilter:{
+            type: String,
+            required: true,
+        },
         filterType: {
             type: String,
             required: true,
+        }
+    },
+    computed: {
+        filteredPokemons() {
+            return this.pokemons.filter(pokemon => pokemon.type.includes('grass'));
         }
     },
 
@@ -58,16 +70,19 @@ export default {
     },
     methods: {
         addToTeam: function (pokemon) {
-            
+
             this.$emit('addTeam', pokemon);
         },
-        removeFromTeam: function(pokemon){
+        removeFromTeam: function (pokemon) {
             this.$emit('removeTeam', pokemon)
         },
         addToFavorite: function (pokemon) {
             pokemon.isFavorite = !pokemon.isFavorite;
             this.$emit('addFavorite', pokemon);
         },
+        filterType(type) {
+            return this.pokemons.filter(pokemon => pokemon.type.includes(type));
+        }
     }
 }
 

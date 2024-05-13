@@ -11,7 +11,7 @@
   <div class="pokedex-container">
     <div class="content">
       <div v-if="pokemons">
-        <PokemonList v-if="showList || showTeam && team.length < 6" :pokemonInFavs="pokemonInFavs" :pokemons="pokemons"
+        <PokemonList v-if="showList || showTeam && team.length < 6" :pokemonInFavs="pokemonInFavs" :pokemons="pokemons" :pokemonFilter="filteredPokemons"
           @addTeam="addTeam" @addFavorite="addFavorite" @removeTeam="removeTeam" @filterType="filterType" />
         <PokemonTeam v-else-if="showTeam && team.length >= 6" :team="team" @addFavorite="addFavorite"
           @removeTeam="removeTeam"></PokemonTeam>
@@ -51,6 +51,7 @@ export default {
       favs: [],
       inventoryItems: [],
       items: [],
+      filteredPokemons: [],
       showTeam: false,
       showFavs: false,
       showShop: false,
@@ -81,7 +82,6 @@ export default {
           // pokemon.pokemonInFavs = true;
 
         })
-        console.log(pokemonData)
       })
       .catch(error => console.log(error));
     fetch('https://pokeapi.co/api/v2/item')
@@ -110,6 +110,14 @@ export default {
 
   },
 
+  computed: {
+    filteredPokemons() {
+      if (this.filterType) {
+        return this.pokemons.filter(pokemon => pokemon.type.includes(this.filterType));
+      }
+      return this.pokemons;
+    }
+  },
   methods: {
     customClasses: function (type) {
       const classes = {
