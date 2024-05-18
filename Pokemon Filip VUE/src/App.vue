@@ -177,7 +177,7 @@ export default {
     addTeam(pokemon) {
       // const pokemonInTeam = this.team.some(p => p.id === pokemon.id);
       if (this.team.length == 6) {
-        alert('Ya has alcanzado el número máximo de Pokémons, si quieres añadir otro primero tendrás que eliminar a uno que ya tengas en el equipo')
+        alert("You've reached the maximum amount of Pokémons in your team, to add another one, please remove a Pokémon from your current team")
       } else {
         // actualizo aquí, si lo hago en la funcion addToTeam se cambia el boton aunque salga el mensaje
         pokemon.inTeam = !pokemon.inTeam;
@@ -188,7 +188,7 @@ export default {
     },
     removeTeam(pokemon) {
       const pokemonIndex = this.team.findIndex(p => p.id === pokemon.id);
-      if (confirm('Seguro que quieres borrar este pokemon?')) {
+      if (confirm('Are you sure you want to remove this Pokémon?')) {
         if (pokemonIndex !== -1) {
           pokemon.inTeam = !pokemon.inTeam;
           this.team.splice(pokemonIndex, 1);

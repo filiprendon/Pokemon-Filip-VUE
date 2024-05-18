@@ -1,6 +1,6 @@
 <template>
-    <h2 v-if="favs.length === 0" style="margin-top: 95px; margin-left: 150px">No tienes Pokémons favoritos</h2>
-    <h2 v-else style="margin-top: 95px; margin-left: 150px">Favourite Pokémons</h2>
+    <h2 v-if="favs.length === 0" style="margin-top: 95px; margin-left: 150px">You don't have any favorite Pokémons</h2>
+    <h2 v-else style="margin-top: 95px; margin-left: 150px">Favorite Pokémons</h2>
     <div class="pokemon-card-container">
         <div class="pokemon-card" v-for="pokemon in favs" :key="pokemon.name" :class="pokemon.typeClass">
             <div class="pokemon-header">

@@ -1,6 +1,6 @@
 <template>
   <div v-if="inventoryItems">
-    <h2 style="margin-top: 95px; margin-left: 150px">Inventario</h2>
+    <h2 style="margin-top: 95px; margin-left: 150px">Inventory</h2>
     <div class="pokemon-card-container">
       <div class="pokemon-card" v-for="item in inventoryItems" :key="item.name">
         <div class="pokemon-header">

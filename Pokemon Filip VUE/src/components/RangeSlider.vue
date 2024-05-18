@@ -5,7 +5,7 @@
     <input type="range" id="range2" name="range2" min="1" max="151" v-model="maxValue">
     <p>Min: {{ minValue }}</p>
     <p>Max: {{ maxValue }}</p>
-    <button @click="searchPokemons(minValue, maxValue)">Buscar</button>
+    <button @click="searchPokemons(minValue, maxValue)">Search</button>
   </div>
 </template>
 

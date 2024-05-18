@@ -3,8 +3,8 @@
     <ul class="navBtns">
       <div>
         <li><button @click="toggle('list')">Show list</button></li>
-        <li><button @click="toggle('team')">Team</button></li>
-        <li><button @click="toggle('favs')">Favourites</button></li>
+        <li><button @click="toggle('team')">Your Team</button></li>
+        <li><button @click="toggle('favs')">Favorites</button></li>
         <li><button @click="toggle('shop')">Poke Shop</button></li>
       </div>
       <div class="dropdown-container" style="display: flex;">
@@ -101,7 +101,7 @@ export default {
     methods: {
       toggle(view) {
         if (this.team.length < 6 && view === 'team') {
-          alert('Puedes ver tu equipo cuando tengas 6 Pokémons, actualmente tienes ' + this.team.length);
+          alert('You can see your team when you add 6 Pokémons, currently you have ' + this.team.length);
           return;
         } else {
           this.$emit('toggle-view', view);

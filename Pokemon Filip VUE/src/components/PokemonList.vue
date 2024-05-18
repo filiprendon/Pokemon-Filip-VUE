@@ -31,7 +31,7 @@
         </div>
     </div>
     <div v-if="pokemonFilter == 0">
-        <h2 style="margin-top: 95px; margin-left: 150px">There are no Pokemons in this filtered search</h2>
+        <h2 style="margin-top: 95px; margin-left: 150px">There are no Pokémons in this filtered search</h2>
     </div>
 </template>
 
