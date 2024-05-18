@@ -219,31 +219,37 @@ export default {
       this.showInventory = view === 'inventory';
     },
     addInventory(item, action) {
-      // console.log(item.name + ' ' + action);
+      console.log(item);
 
       // Verificar si el item ya está en el inventario
       let existingItemIndex = this.items.findIndex(inventoryItem => inventoryItem.name === item.name);
 
-    if (existingItemIndex !== -1) {
+      if (existingItemIndex !== -1) {
         if (this.items[existingItemIndex].quantity == 0 && action == 'remove') {
-            alert('Has alcanzado el máximo');
-            return;
+          alert("You don't have this item to remove it");
+
+          return;
         }
-        if (this.items[existingItemIndex].quantity == 4 && action == 'buy') {
-            alert('Has alcanzado el máximo');
-            return;
+        if (this.items[existingItemIndex].quantity == 5 && !this.items[existingItemIndex].name.includes('ball') && action == 'buy') {
+
+          alert("You've reached the maximun amount of this item");
+          return;
+        }
+        if (this.items[existingItemIndex].quantity == 15 && this.items[existingItemIndex].name.includes('ball') && action == 'buy') {
+          alert("You've reached the maximun amount of this item");
+          return;
         }
         if (action == 'buy') {
-            console.log('Item is already in the inventory. Updating quantity...');
-            this.items[existingItemIndex].quantity += 1;
+          console.log('already added');
+          this.items[existingItemIndex].quantity += 1;
         } else if (action == 'remove') {
-            console.log('Item is already in the inventory. Updating quantity...');
-            this.items[existingItemIndex].quantity -= 1;
+          console.log('already added');
+          this.items[existingItemIndex].quantity -= 1;
         }
-    } else {
-        console.log('Item added to inventory.');
+      } else {
+        console.log('Adding');
         this.items.push({ ...item, quantity: 1 });
-    }
+      }
 
 
 
