@@ -1,6 +1,6 @@
 <template>
-    <div v-if="pokemonFilter">
-        <h2 style="margin-top: 95px; margin-left: 150px">Pokedex</h2>
+    <div v-if="pokemonFilter != 0">
+        <h2 style="margin-top: 95px; margin-left: 150px">Pokédex</h2>
         <div class="pokemon-card-container">
             <div class="pokemon-card" v-for="pokemon in pokemonFilter" :key="pokemon.name" :class="pokemon.typeClass">
                 <div class="pokemon-header">
@@ -24,18 +24,18 @@
                     <p class="pokemon-type">Type: {{ pokemon.type }}</p>
                     <button v-if="!pokemon.inTeam" class="add-to-team-button" @click="addToTeam(pokemon)">Add to
                         Team</button>
-                    <button v-else class="remove-from-team-button" @click="pkkp()">Remove From
+                    <button v-else class="remove-from-team-button" @click="removeFromTeam(pokemon)">Remove From
                         Team</button>
                 </div>
             </div>
         </div>
     </div>
+    <div v-if="pokemonFilter == 0">
+        <h2 style="margin-top: 95px; margin-left: 150px">There are no Pokemons in this filtered search</h2>
+    </div>
 </template>
 
 <script>
-import NavComp from './NavComp.vue';
-
-
 export default {
     props: {
         pokemons: {
@@ -47,7 +47,7 @@ export default {
             required: true,
         },
         pokemonFilter: {
-            type: String,
+            type: Array,
             required: true,
         },
         filterType: {
@@ -59,11 +59,6 @@ export default {
             required: true,
         }
     },
-    computed: {
-        filteredPokemons() {
-            return this.pokemons.filter(pokemon => pokemon.type.includes('grass'));
-        }
-    },
 
     data() {
         return {
@@ -72,12 +67,12 @@ export default {
             favs: [],
         }
     },
-    mounted() {
-        this.pokemons.forEach(pokemon => {
-            console.log(pokemon.type)
-        });
-        console.log()
-    },
+    // mounted() {
+    //     this.pokemons.forEach(pokemon => {
+    //         console.log(pokemon.type)
+    //     });
+    //     console.log()
+    // },
     methods: {
         addToTeam: function (pokemon) {
 
@@ -90,15 +85,12 @@ export default {
             pokemon.isFavorite = !pokemon.isFavorite;
             this.$emit('addFavorite', pokemon);
         },
-        filterType(type) {
-            return this.pokemons.filter(pokemon => pokemon.type.includes(type));
-        },
+        // filterType(type) {
+        //     console.log(type)
+        //     return this.pokemons.filter(pokemon => pokemon.type.includes(type));
+        // },
         addToFilterTypes(pokemon) {
             this.$emit('addToFilterTypes', pokemon);
-        },
-        pkkp() {
-            
-            console.log(this.typesForFilter)
         }
     }
 }

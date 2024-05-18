@@ -18,7 +18,7 @@
             </svg>
           </button>
           <ul class="dropdown-menu" @click.stop>
-            <RangeSlider></RangeSlider>
+            <RangeSlider @searchRange="searchRange" :minVal="minVal" :maxVal="maxVal"></RangeSlider>
           </ul>
         </div>
 
@@ -79,64 +79,66 @@ export default {
     typesForFilter: {
       type: Array,
       required: true
-    }
+    },
+    minVal: {
+      type: Number,
+      required: true
+    },
+    maxVal: {
+      type: Number,
+      required: true
+    },
   },
 
-  data() {
-    return {
-      isOpen: false,
-      pokemonTypes: [],
-      filterType: [],
-    };
-  },
+    data() {
+      return {
+        isOpen: false,
+        pokemonTypes: [],
+        filterType: [],
+      };
+    },
 
-  methods: {
-    toggle(view) {
-      if (this.team.length < 6 && view === 'team') {
-        alert('Puedes ver tu equipo cuando tengas 6 Pokémons, actualmente tienes ' + this.team.length);
-        return;
-      } else {
-        this.$emit('toggle-view', view);
-      }
-
+    methods: {
+      toggle(view) {
+        if (this.team.length < 6 && view === 'team') {
+          alert('Puedes ver tu equipo cuando tengas 6 Pokémons, actualmente tienes ' + this.team.length);
+          return;
+        } else {
+          this.$emit('toggle-view', view);
+        }
+      },
+      dropdownSlider() {
+        this.isOpen = !this.isOpen;
+      },
+      toggleDropdown() {
+        this.pokemonTypes = [...new Set(this.pokemons.map(pokemon => pokemon.type))];
+        this.isOpen = !this.isOpen;
+      },
+      filterByType(type) {
+        const index = this.filterType.indexOf(type);
+        if (index > -1) {
+          this.filterType.splice(index, 1);
+        } else {
+          this.filterType.push(type);
+        }
+        this.$emit('filterSearch', this.filterType);
+      },
+      searchRange(minVal, maxVal) {
+        // console.log('LLEGA AQUI')
+        this.$emit('searchFromRange', minVal, maxVal)
+      },
     },
-    dropdownSlider() {
-      this.isOpen = !this.isOpen;
+    computed: {
+      filteredPokemons() {
+        if (this.filterType.length === 0) {
+          return this.pokemons;
+        }
+        return this.pokemons.filter(pokemon => {
+          return this.filterType.some(type => pokemon.types.includes(type));
+        });
+      },
     },
-    toggleDropdown() {
-      this.pokemonTypes = [...new Set(this.pokemons.map(pokemon => pokemon.type))];
-      this.isOpen = !this.isOpen;
-    },
-    filterByType(type) {
-      const index = this.filterType.indexOf(type);
-      if (index > -1) {
-        this.filterType.splice(index, 1);
-      } else {
-        this.filterType.push(type);
-      }
-      this.$emit('filterSearch', this.filterType);
-    },
-  },
-  computed: {
-    filteredPokemons() {
-      if (this.filterType.length === 0) {
-        return this.pokemons;
-      }
-      return this.pokemons.filter(pokemon => {
-        return this.filterType.some(type => pokemon.types.includes(type));
-      });
-    },
-    // pokemonsFiltrados() {
-    //   if (this.pokemonTypes.length === 0) {
-    //     return this.pokemons;
-    //   } else {
-    //     return this.pokemons.filter(pokemon =>
-    //       this.pokemonTypes.includes(pokemon.type)
-    //     );
-    //   }
-    // }
-  },
-};
+  };
 </script>
 
 

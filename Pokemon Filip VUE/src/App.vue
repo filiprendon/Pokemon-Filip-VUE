@@ -8,7 +8,7 @@
       </ul>
   </nav> -->
   <NavComp @toggle-view="toggleView" :pokemons="pokemons" :team="team" @filter="handleCheckbox"
-    @filterSearch="filterSearch" :typesForFilter/>
+    @filterSearch="filterSearch" @searchFromRange="searchFromRange" :typesForFilter />
   <div class="pokedex-container">
     <div class="content">
       <div v-if="pokemons">
@@ -34,6 +34,7 @@ import PokemonTeam from './components/PokemonTeam.vue'
 import PokemonFavs from './components/PokemonFavs.vue'
 import PokeShop from './components/PokeShop.vue'
 import Inventory from './components/Inventory.vue'
+import RangeSlider from './components/RangeSlider.vue'
 export default {
   props: {
     mensaje: String,
@@ -45,6 +46,7 @@ export default {
     NavComp,
     PokeShop,
     Inventory,
+    RangeSlider,
   },
   data() {
     return {
@@ -53,7 +55,6 @@ export default {
       favs: [],
       inventoryItems: [],
       items: [],
-      filteredPokemons: [],
       showTeam: false,
       showFavs: false,
       showShop: false,
@@ -61,69 +62,91 @@ export default {
       showInventory: false,
       pokemonInFavs: false,
       filterType: '',
+      searchRange: [],
       typesForFilter: []
       // pokemonInTeam: false,
     }
   },
   mounted() {
     fetch('https://pokeapi.co/api/v2/pokemon/?limit=151')
-    .then(response => response.json())
-    .then(data => {
-      this.pokemons = data.results;
-      return Promise.all(data.results.map(pokemon => fetch(pokemon.url)));
-    })
-    .then(responses => Promise.all(responses.map(response => response.json())))
-    .then(pokemonData => {
-      const uniqueTypesSet = new Set();
+      .then(response => response.json())
+      .then(data => {
+        this.pokemons = data.results;
+        return Promise.all(data.results.map(pokemon => fetch(pokemon.url)));
+      })
+      .then(responses => Promise.all(responses.map(response => response.json())))
+      .then(pokemonData => {
+        const uniqueTypesSet = new Set();
 
-      this.pokemons.forEach((pokemon, index) => {
-        pokemon.name = pokemonData[index].name;
-        pokemon.imageUrl = pokemonData[index].sprites.other.home.front_default;
-        pokemon.id = pokemonData[index].id;
-        pokemon.types = pokemonData[index].types.map(type => type.type.name);
+        this.pokemons.forEach((pokemon, index) => {
+          pokemon.name = pokemonData[index].name;
+          pokemon.imageUrl = pokemonData[index].sprites.other.home.front_default;
+          pokemon.id = pokemonData[index].id;
+          pokemon.types = pokemonData[index].types.map(type => type.type.name);
 
-        // por cada tipo lo añado al set de tipo unicos para usarlo en el filtro
-        pokemon.types.forEach(type => uniqueTypesSet.add(type));
-        pokemon.type = pokemon.types.join(', ');
-        pokemon.typeClass = this.customClasses(pokemon.type);
-      });
+          // por cada tipo lo añado al set de tipo unicos para usarlo en el filtro
+          pokemon.types.forEach(type => uniqueTypesSet.add(type));
+          pokemon.type = pokemon.types.join(', ');
+          pokemon.typeClass = this.customClasses(pokemon.type);
+        });
 
-      this.typesForFilter = [...uniqueTypesSet];
+        this.typesForFilter = [...uniqueTypesSet];
 
-    })
-    .catch(error => console.log(error));
+      })
+      .catch(error => console.log(error));
 
-  fetch('https://pokeapi.co/api/v2/item')
-    .then(response => response.json())
-    .then(data => {
-      this.items = data.results.map(item => ({
-        name: item.name,
-        imageUrl: null,
-        altText: null,
-        cost: null,
-        quantity: 0
-      }));
-      return Promise.all(data.results.map(item => fetch(item.url)));
-    })
-    .then(responses => Promise.all(responses.map(response => response.json())))
-    .then(itemData => {
-      this.items.forEach((item, i) => {
-        item.imageUrl = itemData[i].sprites.default;
-        item.altText = itemData[i].effect_entries[0].short_effect;
-        item.cost = itemData[i].cost;
-      });
-    })
-    .catch(error => console.log(error));
-},
+    fetch('https://pokeapi.co/api/v2/item')
+      .then(response => response.json())
+      .then(data => {
+        this.items = data.results.map(item => ({
+          name: item.name,
+          imageUrl: null,
+          altText: null,
+          cost: null,
+          quantity: 0
+        }));
+        return Promise.all(data.results.map(item => fetch(item.url)));
+      })
+      .then(responses => Promise.all(responses.map(response => response.json())))
+      .then(itemData => {
+        this.items.forEach((item, i) => {
+          item.imageUrl = itemData[i].sprites.default;
+          item.altText = itemData[i].effect_entries[0].short_effect;
+          item.cost = itemData[i].cost;
+        });
+      })
+      .catch(error => console.log(error));
+  },
 
 
   computed: {
+    // Esta parte se encarga de la lista y de las busquedas
     filteredPokemons() {
-      if (this.filterType) {
-        return this.pokemons.filter(pokemon => pokemon.type.includes(this.filterType));
-      }
-      return this.pokemons;
+    if (this.filterType && this.searchRange.length > 0) {
+        let tiposLimpios = this.filterType.join(', ');
+        let [minVal, maxVal] = this.searchRange;
+
+        return this.pokemons.filter(pokemon => {
+            let tiposArray = tiposLimpios.split(', ');
+            return tiposArray.some(tipo => pokemon.type.includes(tipo)) &&
+                pokemon.id >= minVal && pokemon.id <= maxVal;
+        });
+    } else if (this.filterType) {
+        let tiposLimpios = this.filterType.join(', ');
+        return this.pokemons.filter(pokemon => {
+            let tiposArray = tiposLimpios.split(', ');
+            return tiposArray.some(tipo => pokemon.type.includes(tipo));
+        });
+    } else if (this.searchRange.length > 0) {
+        let [minVal, maxVal] = this.searchRange;
+        return this.pokemons.filter(pokemon => {
+            return pokemon.id >= minVal && pokemon.id <= maxVal;
+        });
+    } else {
+        return this.pokemons;
     }
+}
+
   },
   methods: {
     customClasses: function (type) {
@@ -139,7 +162,17 @@ export default {
     filterSearch(type) {
       this.showList = true;
       this.filterType = type;
-      console.log(this.filterType)
+      let filtros = this.filterType.join(', ')
+      console.log(filtros)
+    },
+    searchFromRange(minVal, maxVal) {
+      this.showTeam = true;
+      this.searchRange = [minVal, maxVal];
+      console.log(`The min val is ${minVal} and the max val is ${maxVal}`);
+
+      // this.searchRange = [minVal, maxVal];
+      // console.log(this.searchRange)
+
     },
     addTeam(pokemon) {
       // const pokemonInTeam = this.team.some(p => p.id === pokemon.id);

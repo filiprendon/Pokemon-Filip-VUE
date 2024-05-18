@@ -1,77 +1,73 @@
 <template>
-    <div
-      id="app"
-      class="flex items-center justify-center bg-gray-100 min-h-screen"
-    >
-      <div class="relative text-lg w-48">
-        <button
-          class="flex items-center justify-between px-3 py-2 bg-white w-full border border-gray-500 rounded-lg"
-          @click="isOptionsExpanded = !isOptionsExpanded"
-          @blur="isOptionsExpanded = false"
-        >
-          <span>{{ selectedOption }}</span>
-          <svg
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            class="h-4 w-4 transform transition-transform duration-200 ease-in-out"
-            :class="isOptionsExpanded ? 'rotate-180' : 'rotate-0'"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-        <transition
-          enter-active-class="transform transition duration-500 ease-custom"
-          enter-class="-translate-y-1/2 scale-y-0 opacity-0"
-          enter-to-class="translate-y-0 scale-y-100 opacity-100"
-          leave-active-class="transform transition duration-300 ease-custom"
-          leave-class="translate-y-0 scale-y-100 opacity-100"
-          leave-to-class="-translate-y-1/2 scale-y-0 opacity-0"
-        >
-          <ul
-            v-show="isOptionsExpanded"
-            class="absolute left-0 right-0 mb-4 bg-white divide-y rounded-lg shadow-lg overflow-hidden"
-          >
-            <li
-              v-for="(option, index) in options"
-              :key="index"
-              class="px-3 py-2 transition-colors duration-300 hover:bg-gray-200"
-              @mousedown.prevent="setOption(option)"
-            >
-              {{ option }}
-            </li>
-          </ul>
-        </transition>
-      </div>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        isOptionsExpanded: false,
-        selectedOption: "1x",
-        options: ["1x", "2x", "3x", "4x or more"]
-      };
-    },
-    methods: {
-      setOption(option) {
-        this.selectedOption = option;
-        this.isOptionsExpanded = false;
+  <div>
+    <label for="range">Select range:</label>
+    <input type="range" id="range" name="range" min="1" max="151" v-model="minValue">
+    <input type="range" id="range2" name="range2" min="1" max="151" v-model="maxValue">
+    <p>Min: {{ minValue }}</p>
+    <p>Max: {{ maxValue }}</p>
+    <button @click="searchPokemons(minValue, maxValue)">Buscar</button>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      minValue: 1,
+      maxValue: 151
+    };
+  },
+  methods: {
+    searchPokemons(minVal, maxVal) {
+      // Los convierto a números pq hay veces donde me sale la alerta aunque el max no sea inferior
+      minVal = parseInt(minVal);
+      maxVal = parseInt(maxVal);
+      if (minVal > maxVal) {
+        alert('The max value cannot be lower than the min value');
+      } else {
+        // console.log(`The min val is ${minVal} and the max val is ${maxVal}`)
+        this.$emit('searchRange', minVal, maxVal)
       }
     }
-  };
-  </script>
-  
-  <style>
-  .ease-custom {
-    transition-timing-function: cubic-bezier(.61,-0.53,.43,1.43);
-  }
-  </style>
-  
+  },
+};
+</script>
+
+<style scoped>
+/* Personaliza el estilo del rango deslizante según tus preferencias */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+/* Estilo del rango deslizante en su estado "hover" */
+input[type=range]:hover {
+  opacity: 1;
+}
+
+/* Estilo del control deslizante "thumb" */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+/* Estilo del control deslizante "thumb" en su estado "hover" */
+input[type=range]::-webkit-slider-thumb:hover {
+  background: #45a049;
+}
+
+/* Estilo del control deslizante "thumb" en su estado "activo" */
+input[type=range]::-webkit-slider-thumb:active {
+  background: #45a049;
+}
+</style>
