@@ -19,8 +19,8 @@
           @removeTeam="removeTeam"></PokemonTeam>
         <PokemonFavs v-else-if="showFavs" :favs="favs" @addFavorite="addFavorite" @addTeam="addTeam"
           @removeTeam="removeTeam"></PokemonFavs>
-        <PokeShop v-else-if="showShop" :items="items" @addToInventory="addInventory"></PokeShop>
-        <Inventory v-else-if="showInventory" :inventoryItems="inventoryItems"></Inventory>
+        <PokeShop v-else-if="showShop" :items @addToInventory="addInventory"></PokeShop>
+        <Inventory v-else-if="showInventory" :items :inventoryItems="inventoryItems"></Inventory>
       </div>
     </div>
   </div>
@@ -122,30 +122,30 @@ export default {
   computed: {
     // Esta parte se encarga de la lista y de las busquedas
     filteredPokemons() {
-    if (this.filterType && this.searchRange.length > 0) {
+      if (this.filterType && this.searchRange.length > 0) {
         let tiposLimpios = this.filterType.join(', ');
         let [minVal, maxVal] = this.searchRange;
 
         return this.pokemons.filter(pokemon => {
-            let tiposArray = tiposLimpios.split(', ');
-            return tiposArray.some(tipo => pokemon.type.includes(tipo)) &&
-                pokemon.id >= minVal && pokemon.id <= maxVal;
+          let tiposArray = tiposLimpios.split(', ');
+          return tiposArray.some(tipo => pokemon.type.includes(tipo)) &&
+            pokemon.id >= minVal && pokemon.id <= maxVal;
         });
-    } else if (this.filterType) {
+      } else if (this.filterType) {
         let tiposLimpios = this.filterType.join(', ');
         return this.pokemons.filter(pokemon => {
-            let tiposArray = tiposLimpios.split(', ');
-            return tiposArray.some(tipo => pokemon.type.includes(tipo));
+          let tiposArray = tiposLimpios.split(', ');
+          return tiposArray.some(tipo => pokemon.type.includes(tipo));
         });
-    } else if (this.searchRange.length > 0) {
+      } else if (this.searchRange.length > 0) {
         let [minVal, maxVal] = this.searchRange;
         return this.pokemons.filter(pokemon => {
-            return pokemon.id >= minVal && pokemon.id <= maxVal;
+          return pokemon.id >= minVal && pokemon.id <= maxVal;
         });
-    } else {
+      } else {
         return this.pokemons;
+      }
     }
-}
 
   },
   methods: {
@@ -218,15 +218,45 @@ export default {
       this.showShop = view === 'shop';
       this.showInventory = view === 'inventory';
     },
-    addInventory(item) {
-      const existingItemIndex = this.inventoryItems.findIndex(i => i.id === item.id);
-      if (existingItemIndex !== -1) {
-        this.inventoryItems[existingItemIndex].quantity += item.quantity;
-        console.log('Quantity updated for:', item.name);
-      } else {
-        this.inventoryItems.push(item);
-        console.log('Item added:', item.name);
-      }
+    addInventory(item, action) {
+      // console.log(item.name + ' ' + action);
+
+      // Verificar si el item ya está en el inventario
+      let existingItemIndex = this.items.findIndex(inventoryItem => inventoryItem.name === item.name);
+
+    if (existingItemIndex !== -1) {
+        if (this.items[existingItemIndex].quantity == 0 && action == 'remove') {
+            alert('Has alcanzado el máximo');
+            return;
+        }
+        if (this.items[existingItemIndex].quantity == 4 && action == 'buy') {
+            alert('Has alcanzado el máximo');
+            return;
+        }
+        if (action == 'buy') {
+            console.log('Item is already in the inventory. Updating quantity...');
+            this.items[existingItemIndex].quantity += 1;
+        } else if (action == 'remove') {
+            console.log('Item is already in the inventory. Updating quantity...');
+            this.items[existingItemIndex].quantity -= 1;
+        }
+    } else {
+        console.log('Item added to inventory.');
+        this.items.push({ ...item, quantity: 1 });
+    }
+
+
+
+
+      console.log(this.inventoryItems)
+      // const existingItemIndex = this.inventoryItems.findIndex(i => i.id === item.id);
+      // if (existingItemIndex !== -1) {
+      //   this.inventoryItems[existingItemIndex].quantity += item.quantity;
+      //   console.log('Quantity updated for:', item.name);
+      // } else {
+      //   this.inventoryItems.push(item);
+      //   console.log('Item added:', item.name);
+      // }
     },
     addToFilterTypes(pokemon) {
       console.log(pokemon.type)

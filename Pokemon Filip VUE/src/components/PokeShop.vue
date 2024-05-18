@@ -12,8 +12,8 @@
                     <img :src="item.imageUrl" :title="item.altText">
                 </div>
                 <div class="buyBtn">
-                    <button class="buy" @click="buyItem(item, -1)">-</button>
-                    <button class="buy" @click="buyItem(item)">+</button>
+                    <button class="buy" @click="buyItem(item, 'remove')">-</button>
+                    <button class="buy" @click="buyItem(item, 'buy')">+</button>
                 </div>
             </div>
         </div>
@@ -60,14 +60,8 @@ export default {
     //         .catch(error => console.log(error));
     // },
     methods: {
-        buyItem(item) {
-            // const itemIndex = this.items.findIndex(item => item.name === name);
-            // if (itemIndex !== -1) {
-            //     this.items[itemIndex].quantity += total;
-            //     console.log(`Cantidad ${name}: ${this.items[itemIndex].quantity}`);
-                // Emitir el evento con el objeto completo del ítem
-                this.$emit('addToInventory', item);
-            // }
+        buyItem(item, action) {
+                this.$emit('addToInventory', item, action);
         }
     },
 }
