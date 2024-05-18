@@ -5,7 +5,7 @@
             <div class="pokemon-card" v-for="item in items" :key="item.name">
                 <div class="pokemon-header">
                     <h2 class="pokemon-name">{{ item.name }}</h2>
-                    <h3 class="pokemon-id"> {{ item.cost }}</h3>
+                    <!-- <h3 class="pokemon-id"> {{ item.cost }}</h3> -->
 
                 </div>
                 <div class="pokemon-image">
