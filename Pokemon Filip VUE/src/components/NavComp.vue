@@ -42,13 +42,14 @@
             </svg></button>
 
           <ul class="dropdown-menu" @click.stop>
-            <li v-for="(type, index) in pokemonTypes" :key="index">
+            <li v-for="type in typesForFilter" :key="type">
               <label class="dropdown-item">
-                <input type="checkbox" @click="filterByType(type)">
+                <input type="checkbox" @change="filterByType(type)">
                 {{ type }}
               </label>
             </li>
           </ul>
+
         </div>
       </div>
 
@@ -75,12 +76,17 @@ export default {
       type: Array,
       required: true
     },
+    typesForFilter: {
+      type: Array,
+      required: true
+    }
   },
 
   data() {
     return {
       isOpen: false,
       pokemonTypes: [],
+      filterType: [],
     };
   },
 
@@ -102,26 +108,33 @@ export default {
       this.isOpen = !this.isOpen;
     },
     filterByType(type) {
-      // Si el tipo seleccionado es igual al tipo filtrado actualmente, se elimina el filtro
-      if (type === this.filterType) {
-        this.filterType = '';
+      const index = this.filterType.indexOf(type);
+      if (index > -1) {
+        this.filterType.splice(index, 1);
       } else {
-        this.filterType = type;
+        this.filterType.push(type);
       }
       this.$emit('filterSearch', this.filterType);
-    }
-    ,
+    },
   },
   computed: {
-    pokemonsFiltrados() {
-      if (this.pokemonTypes.length === 0) {
+    filteredPokemons() {
+      if (this.filterType.length === 0) {
         return this.pokemons;
-      } else {
-        return this.pokemons.filter(pokemon =>
-          this.pokemonTypes.includes(pokemon.type)
-        );
       }
-    }
+      return this.pokemons.filter(pokemon => {
+        return this.filterType.some(type => pokemon.types.includes(type));
+      });
+    },
+    // pokemonsFiltrados() {
+    //   if (this.pokemonTypes.length === 0) {
+    //     return this.pokemons;
+    //   } else {
+    //     return this.pokemons.filter(pokemon =>
+    //       this.pokemonTypes.includes(pokemon.type)
+    //     );
+    //   }
+    // }
   },
 };
 </script>

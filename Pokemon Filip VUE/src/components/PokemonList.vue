@@ -24,7 +24,7 @@
                     <p class="pokemon-type">Type: {{ pokemon.type }}</p>
                     <button v-if="!pokemon.inTeam" class="add-to-team-button" @click="addToTeam(pokemon)">Add to
                         Team</button>
-                    <button v-else class="remove-from-team-button" @click="removeFromTeam(pokemon)">Remove From
+                    <button v-else class="remove-from-team-button" @click="pkkp()">Remove From
                         Team</button>
                 </div>
             </div>
@@ -46,12 +46,16 @@ export default {
             type: Boolean,
             required: true,
         },
-        pokemonFilter:{
+        pokemonFilter: {
             type: String,
             required: true,
         },
         filterType: {
             type: String,
+            required: true,
+        },
+        typesForFilter: {
+            type: Array,
             required: true,
         }
     },
@@ -68,6 +72,12 @@ export default {
             favs: [],
         }
     },
+    mounted() {
+        this.pokemons.forEach(pokemon => {
+            console.log(pokemon.type)
+        });
+        console.log()
+    },
     methods: {
         addToTeam: function (pokemon) {
 
@@ -82,6 +92,13 @@ export default {
         },
         filterType(type) {
             return this.pokemons.filter(pokemon => pokemon.type.includes(type));
+        },
+        addToFilterTypes(pokemon) {
+            this.$emit('addToFilterTypes', pokemon);
+        },
+        pkkp() {
+            
+            console.log(this.typesForFilter)
         }
     }
 }

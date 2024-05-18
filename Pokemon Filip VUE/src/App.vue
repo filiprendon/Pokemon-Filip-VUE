@@ -7,12 +7,14 @@
           <li><button @click="toggleView('shop')">Poke Shop</button></li>
       </ul>
   </nav> -->
-  <NavComp @toggle-view="toggleView" :pokemons="pokemons" :team="team" @filter="handleCheckbox" @filterSearch="filterSearch"/>
+  <NavComp @toggle-view="toggleView" :pokemons="pokemons" :team="team" @filter="handleCheckbox"
+    @filterSearch="filterSearch" :typesForFilter/>
   <div class="pokedex-container">
     <div class="content">
       <div v-if="pokemons">
-        <PokemonList v-if="showList || showTeam && team.length < 6" :pokemonInFavs="pokemonInFavs" :pokemons="pokemons" :pokemonFilter="filteredPokemons"
-          @addTeam="addTeam" @addFavorite="addFavorite" @removeTeam="removeTeam" @filterType="filterType" />
+        <PokemonList v-if="showList || showTeam && team.length < 6" :pokemonInFavs="pokemonInFavs" :pokemons="pokemons"
+          :pokemonFilter="filteredPokemons" @addTeam="addTeam" @addFavorite="addFavorite" @removeTeam="removeTeam"
+          @filterType="filterType" :typesForFilter />
         <PokemonTeam v-else-if="showTeam && team.length >= 6" :team="team" @addFavorite="addFavorite"
           @removeTeam="removeTeam"></PokemonTeam>
         <PokemonFavs v-else-if="showFavs" :favs="favs" @addFavorite="addFavorite" @addTeam="addTeam"
@@ -59,56 +61,61 @@ export default {
       showInventory: false,
       pokemonInFavs: false,
       filterType: '',
+      typesForFilter: []
       // pokemonInTeam: false,
     }
   },
   mounted() {
     fetch('https://pokeapi.co/api/v2/pokemon/?limit=151')
-      .then(response => response.json())
-      .then(data => {
-        this.pokemons = data.results;
-        return Promise.all(data.results.map(pokemon => fetch(pokemon.url)));
-      })
-      .then(responses => Promise.all(responses.map(response => response.json())))
-      .then(pokemonData => {
-        this.pokemons.forEach((pokemon, index) => {
-          pokemon.name = pokemonData[index].name;
-          // pokemon.imageUrl = pokemonData[index].sprites.front_default;
-          // Multiple options instead of home we can choose dream_world, official-artwork, etc...
-          pokemon.imageUrl = pokemonData[index].sprites.other.home.front_default;
-          pokemon.id = pokemonData[index].id;
-          pokemon.type = pokemonData[index].types.map(type => type.type.name).join(', ');
-          pokemon.typeClass = this.customClasses(pokemon.type);
-          // pokemon.pokemonInFavs = true;
+    .then(response => response.json())
+    .then(data => {
+      this.pokemons = data.results;
+      return Promise.all(data.results.map(pokemon => fetch(pokemon.url)));
+    })
+    .then(responses => Promise.all(responses.map(response => response.json())))
+    .then(pokemonData => {
+      const uniqueTypesSet = new Set();
 
-        })
-      })
-      .catch(error => console.log(error));
-    fetch('https://pokeapi.co/api/v2/item')
-      .then(response => response.json())
-      .then(data => {
-        this.items = data.results.map(item => ({
-          name: item.name,
-          imageUrl: null,
-          altText: null,
-          cost: null,
-          quantity: 0
-        }));
-        // Esto lo hago ya que al hacer un fetch con la url nada más me devuelve muy pocos datos
-        // Es como hacer 'https://pokeapi.co/api/v2/item/ID' en vez de 'https://pokeapi.co/api/v2/item'
-        return Promise.all(data.results.map(item => fetch(item.url)));
-      })
-      .then(responses => Promise.all(responses.map(response => response.json())))
-      .then(itemData => {
-        this.items.forEach((item, i) => {
-          item.imageUrl = itemData[i].sprites.default;
-          item.altText = itemData[i].effect_entries[0].short_effect;
-          item.cost = itemData[i].cost;
-        })
-      })
-      .catch(error => console.log(error));
+      this.pokemons.forEach((pokemon, index) => {
+        pokemon.name = pokemonData[index].name;
+        pokemon.imageUrl = pokemonData[index].sprites.other.home.front_default;
+        pokemon.id = pokemonData[index].id;
+        pokemon.types = pokemonData[index].types.map(type => type.type.name);
 
-  },
+        // por cada tipo lo añado al set de tipo unicos para usarlo en el filtro
+        pokemon.types.forEach(type => uniqueTypesSet.add(type));
+        pokemon.type = pokemon.types.join(', ');
+        pokemon.typeClass = this.customClasses(pokemon.type);
+      });
+
+      this.typesForFilter = [...uniqueTypesSet];
+
+    })
+    .catch(error => console.log(error));
+
+  fetch('https://pokeapi.co/api/v2/item')
+    .then(response => response.json())
+    .then(data => {
+      this.items = data.results.map(item => ({
+        name: item.name,
+        imageUrl: null,
+        altText: null,
+        cost: null,
+        quantity: 0
+      }));
+      return Promise.all(data.results.map(item => fetch(item.url)));
+    })
+    .then(responses => Promise.all(responses.map(response => response.json())))
+    .then(itemData => {
+      this.items.forEach((item, i) => {
+        item.imageUrl = itemData[i].sprites.default;
+        item.altText = itemData[i].effect_entries[0].short_effect;
+        item.cost = itemData[i].cost;
+      });
+    })
+    .catch(error => console.log(error));
+},
+
 
   computed: {
     filteredPokemons() {
@@ -129,7 +136,7 @@ export default {
       return classes;
 
     },
-    filterSearch(type){
+    filterSearch(type) {
       this.showList = true;
       this.filterType = type;
       console.log(this.filterType)
@@ -187,7 +194,12 @@ export default {
         this.inventoryItems.push(item);
         console.log('Item added:', item.name);
       }
+    },
+    addToFilterTypes(pokemon) {
+      console.log(pokemon.type)
+
     }
+
 
 
 
