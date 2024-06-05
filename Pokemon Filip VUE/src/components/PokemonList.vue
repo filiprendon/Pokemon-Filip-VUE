@@ -67,12 +67,6 @@ export default {
             favs: [],
         }
     },
-    // mounted() {
-    //     this.pokemons.forEach(pokemon => {
-    //         console.log(pokemon.type)
-    //     });
-    //     console.log()
-    // },
     methods: {
         addToTeam: function (pokemon) {
 
@@ -85,10 +79,6 @@ export default {
             pokemon.isFavorite = !pokemon.isFavorite;
             this.$emit('addFavorite', pokemon);
         },
-        // filterType(type) {
-        //     console.log(type)
-        //     return this.pokemons.filter(pokemon => pokemon.type.includes(type));
-        // },
         addToFilterTypes(pokemon) {
             this.$emit('addToFilterTypes', pokemon);
         }

@@ -1,12 +1,5 @@
 <template>
-    <!-- <div v-if="pokemons"> -->
     <h2 style="margin-top: 95px; margin-left: 150px">Your team</h2>
-    <!-- <div v-if="team.length === 0">
-        <h1>No hay</h1>
-    </div>
-    <div v-else-if="team.length > 0 && team.length < 6">
-        <h1>No hay suficientes Pokémons, necesitas tener 6 en tu equipo</h1>
-    </div> -->
     <div class="pokemon-card-container">
         <div class="pokemon-card" v-for="pokemon in team" :key="pokemon.name" :class="pokemon.typeClass"
             v-if="team.length = 6">
@@ -29,7 +22,6 @@
                 <p class="pokemon-type">Type: {{ pokemon.type }}</p>
                 <button class="remove-from-team-button" @click="removeFromTeam(pokemon)">Remove from team</button>
             </div>
-            <!-- </div> -->
         </div>
     </div>
 

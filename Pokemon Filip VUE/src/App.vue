@@ -122,30 +122,21 @@ export default {
   computed: {
     // Esta parte se encarga de la lista y de las busquedas
     filteredPokemons() {
-      if (this.filterType && this.searchRange.length > 0) {
-        let tiposLimpios = this.filterType.join(', ');
-        let [minVal, maxVal] = this.searchRange;
+      const { filterType, searchRange, pokemons } = this;
+      const [minVal, maxVal] = searchRange;
 
-        return this.pokemons.filter(pokemon => {
-          let tiposArray = tiposLimpios.split(', ');
-          return tiposArray.some(tipo => pokemon.type.includes(tipo)) &&
-            pokemon.id >= minVal && pokemon.id <= maxVal;
-        });
-      } else if (this.filterType) {
-        let tiposLimpios = this.filterType.join(', ');
-        return this.pokemons.filter(pokemon => {
-          let tiposArray = tiposLimpios.split(', ');
-          return tiposArray.some(tipo => pokemon.type.includes(tipo));
-        });
-      } else if (this.searchRange.length > 0) {
-        let [minVal, maxVal] = this.searchRange;
-        return this.pokemons.filter(pokemon => {
-          return pokemon.id >= minVal && pokemon.id <= maxVal;
-        });
+      if (filterType.length > 0 && searchRange.length > 0) {
+        const filteredByType = pokemons.filter(pokemon => filterType.some(type => pokemon.type.includes(type)));
+        return filteredByType.filter(pokemon => pokemon.id >= minVal && pokemon.id <= maxVal);
+      } else if (filterType.length > 0) {
+        return pokemons.filter(pokemon => filterType.some(type => pokemon.type.includes(type)));
+      } else if (searchRange.length > 0) {
+        return pokemons.filter(pokemon => pokemon.id >= minVal && pokemon.id <= maxVal);
       } else {
-        return this.pokemons;
+        return pokemons;
       }
     }
+
 
   },
   methods: {
@@ -212,6 +203,7 @@ export default {
     },
 
     toggleView(view) {
+      // Esto es como un if PRO, si view = x, pone la variable a true
       this.showList = view === 'list';
       this.showTeam = view === 'team';
       this.showFavs = view === 'favs';
